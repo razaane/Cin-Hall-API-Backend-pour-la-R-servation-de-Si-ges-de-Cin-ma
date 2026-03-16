@@ -10,7 +10,8 @@ return new class extends Migration {
         Schema::create('reservation_seat', function (Blueprint $table) {
             $table->id();
             $table->foreignId('reservation_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('seat_id')->constrained()->cascadeOnDelete();
+            $table->string('seat_number');
+            $table->enum('seat_type', ['single', 'couple'])->default('single');
         });
     }
 
