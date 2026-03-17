@@ -10,7 +10,6 @@
  */
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | JWT Authentication Secret
@@ -102,6 +101,7 @@ return [
     */
 
     'ttl' => env('JWT_TTL', 60),
+    'ttl' => (int) env('JWT_TTL', 60),
 
     /*
     |--------------------------------------------------------------------------
@@ -112,6 +112,19 @@ return [
     | within. I.E. The user can refresh their token within a 2 week window of
     | the original token being created until they must re-authenticate.
     | Defaults to 2 weeks.
+    | Specify the length of time (in minutes) that the token can be refreshed within.
+    | This defines the refresh window, during which the user can refresh their token
+    | before re-authentication is required.
+    |
+    | By default, a refresh will NOT issue a new "iat" (issued at) timestamp. If changed
+    | to true, each refresh will issue a new "iat" timestamp, extending the refresh
+    | period from the most recent refresh. This results in a rolling refresh
+    |
+    | To retain a fluid refresh window from the last refresh action (i.e., the behavior between
+    | version 2.5.0 and 2.8.2), set "refresh_iat" to true. With this setting, the refresh
+    | window will renew with each subsequent refresh.
+    |
+    | The refresh ttl defaults to 2 weeks.
     |
     | You can also set this to null, to yield an infinite refresh time.
     | Some may want this instead of never expiring tokens for e.g. a mobile app.
@@ -121,6 +134,8 @@ return [
     */
 
     'refresh_ttl' => env('JWT_REFRESH_TTL', 20160),
+    'refresh_iat' => env('JWT_REFRESH_IAT', false),
+    'refresh_ttl' => (int) env('JWT_REFRESH_TTL', 20160),
 
     /*
     |--------------------------------------------------------------------------
@@ -131,7 +146,7 @@ return [
     |
     */
 
-    'algo' => env('JWT_ALGO', Tymon\JWTAuth\Providers\JWT\Provider::ALGO_HS256),
+    'algo' => env('JWT_ALGO', 'HS256'),
 
     /*
     |--------------------------------------------------------------------------
@@ -205,7 +220,7 @@ return [
     |
     */
 
-    'leeway' => env('JWT_LEEWAY', 0),
+    'leeway' => (int) env('JWT_LEEWAY', 0),
 
     /*
     |--------------------------------------------------------------------------
@@ -232,7 +247,18 @@ return [
     |
     */
 
-    'blacklist_grace_period' => env('JWT_BLACKLIST_GRACE_PERIOD', 0),
+    'blacklist_grace_period' => (int) env('JWT_BLACKLIST_GRACE_PERIOD', 0),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Show blacklisted token option
+    |--------------------------------------------------------------------------
+    |
+    | Specify if you want to show black listed token exception on the laravel logs.
+    |
+    */
+
+    'show_black_list_exception' => env('JWT_SHOW_BLACKLIST_EXCEPTION', true),
 
     /*
     |--------------------------------------------------------------------------
@@ -254,6 +280,17 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Cookie key name
+    |--------------------------------------------------------------------------
+    |
+    | Specify the cookie key name that you would like to use for the cookie token.
+    |
+    */
+
+    'cookie_key_name' => 'token',
+
+    /*
+    |--------------------------------------------------------------------------
     | Providers
     |--------------------------------------------------------------------------
     |
@@ -272,7 +309,7 @@ return [
         |
         */
 
-        'jwt' => Tymon\JWTAuth\Providers\JWT\Lcobucci::class,
+        'jwt' => PHPOpenSourceSaver\JWTAuth\Providers\JWT\Lcobucci::class,
 
         /*
         |--------------------------------------------------------------------------
@@ -283,7 +320,7 @@ return [
         |
         */
 
-        'auth' => Tymon\JWTAuth\Providers\Auth\Illuminate::class,
+        'auth' => PHPOpenSourceSaver\JWTAuth\Providers\Auth\Illuminate::class,
 
         /*
         |--------------------------------------------------------------------------
@@ -295,7 +332,5 @@ return [
         */
 
         'storage' => Tymon\JWTAuth\Providers\Storage\Illuminate::class,
-
     ],
-
 ];
