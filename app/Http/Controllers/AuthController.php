@@ -22,12 +22,11 @@ class AuthController extends Controller
             'role' => 'user'
         ]);
 
-        $token = auth('api')->login($user);
+
 
         return response()->json([
             'user'  => $user,
-            'token' => $token,
-            'type'  => 'bearer',
+            'type'  => 'bearer'
         ], 201);
     }
 
@@ -69,4 +68,4 @@ class AuthController extends Controller
             'type'  => 'bearer',
         ]);
     }
-}
+} 
