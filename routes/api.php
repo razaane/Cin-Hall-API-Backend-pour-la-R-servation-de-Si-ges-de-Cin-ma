@@ -4,8 +4,13 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 
+
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\DashboardController;
+
+use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\RoomController;
+
 
 use App\Http\Controllers\FilmController;
 use App\Http\Controllers\GenreController;
@@ -66,5 +71,15 @@ Route::middleware('auth:api')->group(function () {
         Route::delete('/seances/{id}', [SeanceController::class, 'destroy']);
 
     });
+
+    Route::middleware('auth:api')->group(function() {
+    Route::get('rooms/{room}/seances', [ReservationController::class,'showSeances']);
+    Route::post('reservations', [ReservationController::class,'store']);
+    Route::get('reservations/{reservation}', [ReservationController::class,'show']);
+
+Route::apiResource('rooms', RoomController::class);
+
+});
+
 
 });

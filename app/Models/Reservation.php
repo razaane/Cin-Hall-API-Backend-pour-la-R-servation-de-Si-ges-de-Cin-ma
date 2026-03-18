@@ -19,5 +19,23 @@ class Reservation extends Model
     }
 }
 
-
-
+  protected $fillable=[
+    'seance_id',
+    'user_id',
+    'number_of_seats',
+    'status'
+  ];
+  public function Seance(){
+    $this->belongsTo(Seance::class);
+  }
+   public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+    public static function avlblSeats($seance_id){
+        $seance=Seance::find($seance_id);
+        $reservedSeats = $seance->reservations()->whereIn('status',['pending','confirmed','paid'])->sum('number_of_seats');
+        $availableSeats = $seance->room->total_seats - $reservedSeats;
+        return $availableSeats;
+    }
+}
