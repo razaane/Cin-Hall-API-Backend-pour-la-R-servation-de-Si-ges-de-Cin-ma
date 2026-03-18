@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of jwt-auth.
+ *
+ * (c) Sean Tymon <tymon148@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 return [
     /*
     |--------------------------------------------------------------------------
@@ -35,6 +44,7 @@ return [
     */
 
     'keys' => [
+
         /*
         |--------------------------------------------------------------------------
         | Public Key
@@ -71,6 +81,7 @@ return [
         */
 
         'passphrase' => env('JWT_PASSPHRASE'),
+
     ],
 
     /*
@@ -89,6 +100,7 @@ return [
     |
     */
 
+    'ttl' => env('JWT_TTL', 60),
     'ttl' => (int) env('JWT_TTL', 60),
 
     /*
@@ -96,6 +108,10 @@ return [
     | Refresh time to live
     |--------------------------------------------------------------------------
     |
+    | Specify the length of time (in minutes) that the token can be refreshed
+    | within. I.E. The user can refresh their token within a 2 week window of
+    | the original token being created until they must re-authenticate.
+    | Defaults to 2 weeks.
     | Specify the length of time (in minutes) that the token can be refreshed within.
     | This defines the refresh window, during which the user can refresh their token
     | before re-authentication is required.
@@ -117,6 +133,7 @@ return [
     |
     */
 
+    'refresh_ttl' => env('JWT_REFRESH_TTL', 20160),
     'refresh_iat' => env('JWT_REFRESH_IAT', false),
     'refresh_ttl' => (int) env('JWT_REFRESH_TTL', 20160),
 
@@ -126,9 +143,6 @@ return [
     |--------------------------------------------------------------------------
     |
     | Specify the hashing algorithm that will be used to sign the token.
-    |
-    | See here: https://github.com/namshi/jose/tree/master/src/Namshi/JOSE/Signer/OpenSSL
-    | for possible values.
     |
     */
 
@@ -285,6 +299,7 @@ return [
     */
 
     'providers' => [
+
         /*
         |--------------------------------------------------------------------------
         | JWT Provider
@@ -294,7 +309,7 @@ return [
         |
         */
 
-        'jwt' => PHPOpenSourceSaver\JWTAuth\Providers\JWT\Lcobucci::class,
+        'jwt' =>    PHPOpenSourceSaver\JWTAuth\Providers\JWT\Lcobucci::class,
 
         /*
         |--------------------------------------------------------------------------

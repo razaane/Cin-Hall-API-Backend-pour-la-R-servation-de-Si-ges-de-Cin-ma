@@ -3,9 +3,12 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
+
 use App\Http\Controllers\TicketController;
 
-
+use App\Http\Controllers\FilmController;
+use App\Http\Controllers\GenreController;
+use App\Http\Controllers\SeanceController;
 
 
 Route::post('/register', [AuthController::class, 'register']);
@@ -27,7 +30,18 @@ Route::middleware('auth:api')->group(function () {
     //install pdf   
     Route::get('/ticket/{ticket_id}/pdf', [TicketController::class, 'generationPdf']);
 
+    // Films
+    Route::get('/films', [FilmController::class, 'index']);
+    Route::get('/films/{id}', [FilmController::class, 'show']);
 
+    // Genres
+    Route::get('/genres', [GenreController::class, 'index']);
+    Route::get('/genres/{id}', [GenreController::class, 'show']);
+
+    // Seances
+    Route::get('/seances/filter', [SeanceController::class, 'filter']);
+    Route::get('/seances', [SeanceController::class, 'index']);
+    Route::get('/seances/{id}', [SeanceController::class, 'show']);
 
     Route::middleware('isAdmin')->prefix('admin')->group(function () {
 
@@ -35,7 +49,19 @@ Route::middleware('auth:api')->group(function () {
 
         //dashbord admin
          Route::get('/admin/dashboard', [DashboardController::class, 'index']);
+        //Films
+        Route::post('/films', [FilmController::class, 'store']);
+        Route::put('/films/{id}', [FilmController::class, 'update']);
+        Route::delete('/films/{id}', [FilmController::class, 'destroy']);
 
+        //Genres
+        Route::post('/genres', [GenreController::class, 'store']);
+        Route::delete('/genres/{id}', [GenreController::class, 'destroy']);
+
+        //Seances
+        Route::post('/seances', [SeanceController::class, 'store']);
+        Route::put('/seances/{id}', [SeanceController::class, 'update']);
+        Route::delete('/seances/{id}', [SeanceController::class, 'destroy']);
 
     });
 
