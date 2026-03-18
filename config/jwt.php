@@ -309,7 +309,7 @@ return [
         |
         */
 
-        'jwt' => PHPOpenSourceSaver\JWTAuth\Providers\JWT\Lcobucci::class,
+        'jwt' =>    PHPOpenSourceSaver\JWTAuth\Providers\JWT\Lcobucci::class,
 
         /*
         |--------------------------------------------------------------------------
@@ -331,6 +331,6 @@ return [
         |
         */
 
-        'storage' => Tymon\JWTAuth\Providers\Storage\Illuminate::class,
+        'storage' => PHPOpenSourceSaver\JWTAuth\Providers\Storage\Illuminate::class,
     ],
 ];
