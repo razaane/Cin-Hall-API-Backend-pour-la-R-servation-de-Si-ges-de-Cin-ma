@@ -20,14 +20,12 @@ INSERT INTO seances (film_id, room_id, start_time, language, type, created_at, u
 (1, 1, '2026-03-20 18:00:00', 'FR', 'normale', NOW(), NOW()),
 (2, 2, '2026-03-21 20:00:00', 'EN', 'vip', NOW(), NOW());
 
-INSERT INTO reservations (user_id, seance_id, status, created_at, updated_at) VALUES
-(2, 1, 'pending', NOW(), NOW()),
-(2, 2, 'paid', NOW(), NOW());
+INSERT INTO reservations (user_id, seance_id, seat_number, status, created_at, updated_at) VALUES
+(2, 1, 45,'pending', NOW(), NOW()),
+(2, 2, 60,'paid', NOW(), NOW());
 
-INSERT INTO reservation_seat (reservation_id, seat_number, seat_type) VALUES
-(1, 'A1', 'single'),
-(1, 'A2', 'single'),
-(2, 'B1', 'couple');
+=
 
 INSERT INTO tickets (reservation_id, user_id, qr_code, created_at, updated_at) VALUES
 (2, 2, 'QR123456789', NOW(), NOW());
+
