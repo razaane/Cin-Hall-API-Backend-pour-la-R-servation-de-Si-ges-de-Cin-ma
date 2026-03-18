@@ -11,7 +11,6 @@ return new class extends Migration {
             $table->id();
             $table->string('name');
             $table->enum('type', ['normale', 'vip']);
-            $table->integer('capacity');
             $table->integer('total_seats');
             $table->timestamps();
         });
