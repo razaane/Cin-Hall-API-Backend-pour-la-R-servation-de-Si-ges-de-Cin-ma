@@ -44,13 +44,17 @@ class TicketController extends Controller
             ->size(200)
             ->generate($ticket->qr_code);
 
+        $qrBase64 = base64_encode($qrSvg);
+
+        $qrImage = "data:image/svg+xml;base64," . $qrBase64;
+
         PDF::setOptions([
             'isRemoteEnabled' => true,
             'dpi' => 96,
         ]);
 
         $pdf = PDF::loadHTML("
-            <h2 style='text-align:center;'>🎟️ Ticket Cinéma</h2>
+            <h2 style='text-align:center;'>Ticket Cinéma</h2>
 
             <p><strong>Nom:</strong> {$reservation->user->name}</p>
             <p><strong>Film:</strong> ".($reservation->seance->film->title ?? 'N/A')."</p>
@@ -59,7 +63,7 @@ class TicketController extends Controller
             <p><strong>Date:</strong> ".($reservation->seance->date ?? 'N/A')."</p>
 
             <div style='text-align:center; margin-top:20px;'>
-                {$qrSvg}
+                <img src='{$qrImage}' width='150'>
             </div>
         ");
 
