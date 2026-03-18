@@ -6,6 +6,19 @@ use Illuminate\Database\Eloquent\Model;
 
 class Reservation extends Model
 {
+    public function ticket(){
+        return $this->hasOne(Ticket::class);
+    }
+
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
+    
+    public function seance(){
+        return $this->belongsTo(Seance::class);
+    }
+}
+
   protected $fillable=[
     'seance_id',
     'user_id',

@@ -3,8 +3,14 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
+
+
+use App\Http\Controllers\TicketController;
+use App\Http\Controllers\DashboardController;
+
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\RoomController;
+
 
 use App\Http\Controllers\FilmController;
 use App\Http\Controllers\GenreController;
@@ -25,6 +31,11 @@ Route::middleware('auth:api')->group(function () {
     Route::put('/profile', [UserController::class, 'update']);
     Route::delete('/profile', [UserController::class, 'destroy']);
 
+    //generate ticket 
+    Route::get('/generate-ticket/{reservation_id}', [TicketController::class, 'generateTicket']); 
+    //install pdf   
+    Route::get('/ticket/{ticket_id}/pdf', [TicketController::class, 'generationPdf']);
+
     // Films
     Route::get('/films', [FilmController::class, 'index']);
     Route::get('/films/{id}', [FilmController::class, 'show']);
@@ -41,6 +52,9 @@ Route::middleware('auth:api')->group(function () {
     Route::middleware('isAdmin')->prefix('admin')->group(function () {
 
         Route::get('/users', [UserController::class, 'index']);
+
+        //dashbord admin
+        Route::get('/dashboard', [DashboardController::class, 'index']);
 
         //Films
         Route::post('/films', [FilmController::class, 'store']);
