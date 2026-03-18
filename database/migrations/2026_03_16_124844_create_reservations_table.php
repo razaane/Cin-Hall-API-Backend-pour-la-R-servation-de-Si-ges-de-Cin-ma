@@ -15,6 +15,7 @@ return new class extends Migration {
             $table->enum('status', ['pending', 'paid', 'cancelled', 'expired'])
                   ->default('pending');
             $table->timestamp('expires_at')->nullable();
+            $table->integer('seat_number');
             $table->timestamps();
         });
     }
