@@ -11,6 +11,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('seance_id')->constrained()->cascadeOnDelete();
+            $table->integer('seat_number');
             $table->enum('status', ['pending', 'paid', 'cancelled', 'expired'])
                   ->default('pending');
             $table->timestamp('expires_at')->nullable();
