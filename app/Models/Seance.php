@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\Film;
 
@@ -22,4 +23,10 @@ class Seance extends Model
     {
         return $this->belongsTo(Film::class);
     }
+
+    public function reservations(){
+        return $this->hasMany(Reservation::class);
+    }
+
 }
+
