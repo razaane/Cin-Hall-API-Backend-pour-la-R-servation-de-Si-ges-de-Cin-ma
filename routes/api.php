@@ -6,6 +6,9 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\RoomController;
 
+use App\Http\Controllers\FilmController;
+use App\Http\Controllers\GenreController;
+use App\Http\Controllers\SeanceController;
 
 
 Route::post('/register', [AuthController::class, 'register']);
@@ -22,10 +25,36 @@ Route::middleware('auth:api')->group(function () {
     Route::put('/profile', [UserController::class, 'update']);
     Route::delete('/profile', [UserController::class, 'destroy']);
 
+    // Films
+    Route::get('/films', [FilmController::class, 'index']);
+    Route::get('/films/{id}', [FilmController::class, 'show']);
+
+    // Genres
+    Route::get('/genres', [GenreController::class, 'index']);
+    Route::get('/genres/{id}', [GenreController::class, 'show']);
+
+    // Seances
+    Route::get('/seances/filter', [SeanceController::class, 'filter']);
+    Route::get('/seances', [SeanceController::class, 'index']);
+    Route::get('/seances/{id}', [SeanceController::class, 'show']);
 
     Route::middleware('isAdmin')->prefix('admin')->group(function () {
 
         Route::get('/users', [UserController::class, 'index']);
+
+        //Films
+        Route::post('/films', [FilmController::class, 'store']);
+        Route::put('/films/{id}', [FilmController::class, 'update']);
+        Route::delete('/films/{id}', [FilmController::class, 'destroy']);
+
+        //Genres
+        Route::post('/genres', [GenreController::class, 'store']);
+        Route::delete('/genres/{id}', [GenreController::class, 'destroy']);
+
+        //Seances
+        Route::post('/seances', [SeanceController::class, 'store']);
+        Route::put('/seances/{id}', [SeanceController::class, 'update']);
+        Route::delete('/seances/{id}', [SeanceController::class, 'destroy']);
 
     });
 

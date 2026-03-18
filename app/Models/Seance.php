@@ -4,20 +4,23 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Film;
+
 class Seance extends Model
 {
-    protected $fillable=[
+     use HasFactory;
+
+    protected $fillable = [
+        'film_id',
         'room_id',
         'start_time',
-        'end_time',
+        'language',
         'type'
     ];
-    public function room(){
 
-        return $this->belongsTo(Room::class);
-    }
-
-    public function reservations(){
-        return $this->hasMany(Reservation::class, 'seance_id', 'id');
+    public function film()
+    {
+        return $this->belongsTo(Film::class);
     }
 }
