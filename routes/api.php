@@ -3,14 +3,13 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\ReservationController;
 
 
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\DashboardController;
-
-use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\RoomController;
-
 
 use App\Http\Controllers\FilmController;
 use App\Http\Controllers\GenreController;
@@ -72,6 +71,19 @@ Route::middleware('auth:api')->group(function () {
 
     });
 
+
+});
+// Routes qui nécessitent d'être connecté
+Route::middleware('auth:sanctum')->group(function () {
+    
+    // Route pour créer une réservation (avec timer 15min)
+    Route::post('/reservations', [ReservationController::class, 'store']);
+    
+    // Route pour payer avec Stripe
+    Route::post('/payments/stripe', [PaymentController::class, 'payWithStripe']);
+    
+});
+
     Route::middleware('auth:api')->group(function() {
     Route::get('rooms/{room}/seances', [ReservationController::class,'showSeances']);
     Route::post('reservations', [ReservationController::class,'store']);
@@ -82,4 +94,3 @@ Route::apiResource('rooms', RoomController::class);
 });
 
 
-});
