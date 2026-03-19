@@ -38,7 +38,6 @@ class Reservation extends Model
     {
         return $this->belongsTo(Seance::class);
     }
-
     public function ticket()
     {
         return $this->hasOne(Ticket::class);
@@ -83,5 +82,6 @@ class Reservation extends Model
     public function isPaid()
     {
         return $this->status === self::STATUS_PAID;
+
     }
 }
