@@ -27,23 +27,23 @@ class DashboardController extends Controller
         ];
 
         // ===== Taux d’occupation des séances =====
-        // $seancesQuery = Seance::withCount('reservations');
+        $seancesQuery = Seance::withCount('reservations');
 
-        // if ($from && $to) {
-        //     $seancesQuery->whereBetween('start_time', [$from, $to]);
-        // }
-        // if ($type) {
-        //     $seancesQuery->where('type', $type);
-        // }
+        if ($from && $to) {
+            $seancesQuery->whereBetween('start_time', [$from, $to]);
+        }
+        if ($type) {
+            $seancesQuery->where('type', $type);
+        }
 
-        // $seances = $seancesQuery->with('room')->get()->map(function($s){
-        //     return [
-        //         'date' => $s->start_time,
-        //         'type' => $s->type,
-        //         'tickets' => $s->reservations_count,
-        //         'taux' => $s->room->total_seats > 0 ? ($s->reservations_count / $s->room->total_seats) * 100 : 0
-        //     ];
-        // });
+        $seances = $seancesQuery->with('room')->get()->map(function($s){
+            return [
+                'date' => $s->start_time,
+                'type' => $s->type,
+                'tickets' => $s->reservations_count,
+                'taux' => $s->room->total_seats > 0 ? ($s->reservations_count / $s->room->total_seats) * 100 : 0
+            ];
+        });
 
         // ===== Nombre de tickets vendus et revenus par film =====
         $films = Film::with(['seances.reservations'])->get()->map(function($film){
@@ -67,7 +67,7 @@ class DashboardController extends Controller
         //  Retour JSON 
         return response()->json([
             'vueEnsemble' => $vueEnsemble,
-            // 'seances' => $seances,
+            'seances' => $seances,
             'filmsData' => $films,
             'filmsPopulaires' => $filmsPopulaires,
             'users' => $users
