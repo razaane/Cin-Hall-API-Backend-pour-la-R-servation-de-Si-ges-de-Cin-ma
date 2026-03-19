@@ -66,3 +66,4 @@ class AuthController extends Controller
             'type'  => 'bearer',
         ]);
     }
+}
