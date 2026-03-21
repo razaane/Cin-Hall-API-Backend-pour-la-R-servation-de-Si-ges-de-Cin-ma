@@ -3,6 +3,14 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\ReservationController;
+
+
+use App\Http\Controllers\TicketController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\RoomController;
+
 use App\Http\Controllers\FilmController;
 use App\Http\Controllers\GenreController;
 use App\Http\Controllers\SeanceController;
@@ -22,6 +30,11 @@ Route::middleware('auth:api')->group(function () {
     Route::put('/profile', [UserController::class, 'update']);
     Route::delete('/profile', [UserController::class, 'destroy']);
 
+    //generate ticket 
+    Route::get('/generate-ticket/{reservation_id}', [TicketController::class, 'generateTicket']); 
+    //install pdf   
+    Route::get('/ticket/{ticket_id}/pdf', [TicketController::class, 'generationPdf']);
+
     // Films
     Route::get('/films', [FilmController::class, 'index']);
     Route::get('/films/{id}', [FilmController::class, 'show']);
@@ -39,6 +52,9 @@ Route::middleware('auth:api')->group(function () {
 
         Route::get('/users', [UserController::class, 'index']);
 
+        //dashbord admin
+        Route::get('/dashboard', [DashboardController::class, 'index']);
+
         //Films
         Route::post('/films', [FilmController::class, 'store']);
         Route::put('/films/{id}', [FilmController::class, 'update']);
@@ -55,4 +71,26 @@ Route::middleware('auth:api')->group(function () {
 
     });
 
+
 });
+// Routes qui nécessitent d'être connecté
+Route::middleware('auth:sanctum')->group(function () {
+    
+    // Route pour créer une réservation (avec timer 15min)
+    Route::post('/reservations', [ReservationController::class, 'store']);
+    
+    // Route pour payer avec Stripe
+    Route::post('/payments/stripe', [PaymentController::class, 'payWithStripe']);
+    
+});
+
+    Route::middleware('auth:api')->group(function() {
+    Route::get('rooms/{room}/seances', [ReservationController::class,'showSeances']);
+    Route::post('reservations', [ReservationController::class,'store']);
+    Route::get('reservations/{reservation}', [ReservationController::class,'show']);
+
+Route::apiResource('rooms', RoomController::class);
+
+});
+
+

@@ -29,7 +29,6 @@ class AuthController extends Controller
             'role' => 'user'
         ]);
 
-
         return response()->json([
             'user'  => $user,
             'type'  => 'bearer'
@@ -82,4 +81,4 @@ class AuthController extends Controller
             'type'  => 'bearer',
         ]);
     }
-} 
+}
