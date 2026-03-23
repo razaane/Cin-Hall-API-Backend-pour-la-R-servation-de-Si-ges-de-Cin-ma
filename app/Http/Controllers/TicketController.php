@@ -8,9 +8,23 @@ use App\Models\Ticket;
 use App\Models\Reservation;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Barryvdh\DomPDF\Facade\Pdf;
+use OpenApi\Attributes as OA;
 
 class TicketController extends Controller
 {
+
+    // #[OA\Post(path: "/api/generate-ticket/{reservation_id}",summary: "Generate a ticket from a reservation",description: "Create a ticket and generate QR code for a reservation",security: [["bearerAuth" => []]])]
+    // #[OA\Parameter(name: "reservation_id",in: "path",required: true,description: "ID of the reservation",schema: new OA\Schema(type: "integer"))]
+    // #[OA\Response(response: 200,description: "Ticket created successfully",content: new OA\JsonContent(
+    //         properties: [
+    //             new OA\Property(property: "id", type: "integer"),
+    //             new OA\Property(property: "reservation_id", type: "integer"),
+    //             new OA\Property(property: "user_id", type: "integer"),
+    //             new OA\Property(property: "qr_code", type: "string"),
+    //         ])
+    // )]
+    // #[OA\Response(response: 404,description: "Reservation not found")]
+
 
     public function generateTicket($reservation_id){
         //recuperer la reservation 
@@ -30,6 +44,13 @@ class TicketController extends Controller
 
         return $ticket;
     }
+
+
+    // #[OA\Get(path: "/api/ticket/{ticket_id}/pdf",summary: "Generate and download ticket PDF",description: "Generate a PDF file for a ticket including QR code and reservation details",security: [["bearerAuth" => []]])]
+    // #[OA\Parameter(name: "ticket_id",in: "path",required: true,description: "ID of the ticket",schema: new OA\Schema(type: "integer"))]
+    // #[OA\Response(response: 200,description: "PDF file downloaded successfully")]
+    // #[OA\Response(response: 404,description: "Ticket not found")]
+
 
     public function generationPdf($ticket_id){
         $ticket = Ticket::find($ticket_id);
