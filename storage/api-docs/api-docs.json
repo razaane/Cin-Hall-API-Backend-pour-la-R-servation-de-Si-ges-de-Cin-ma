@@ -735,7 +735,35 @@
                 "operationId": "eb8af953bc7b9646b2294583ed472f06",
                 "responses": {
                     "200": {
-                        "description": "List of seances"
+                        "description": "List of seances",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer"
+                                            },
+                                            "film_id": {
+                                                "type": "integer"
+                                            },
+                                            "room_id": {
+                                                "type": "integer"
+                                            },
+                                            "start_time": {
+                                                "type": "string",
+                                                "format": "date-time"
+                                            },
+                                            "type": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -819,7 +847,32 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Seance retrieved successfully"
+                        "description": "Seance retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer"
+                                        },
+                                        "film_id": {
+                                            "type": "integer"
+                                        },
+                                        "room_id": {
+                                            "type": "integer"
+                                        },
+                                        "start_time": {
+                                            "type": "string",
+                                            "format": "date-time"
+                                        },
+                                        "type": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     },
                     "404": {
                         "description": "Seance not found"
@@ -996,6 +1049,35 @@
                     },
                     "404": {
                         "description": "Reservation not found"
+                    }
+                }
+            }
+        },
+        "/api/ticket/{ticket_id}/pdf": {
+            "get": {
+                "tags": [
+                    "Tickets"
+                ],
+                "summary": "Generate and download ticket PDF",
+                "description": "Generate a PDF file for a ticket including QR code and reservation details",
+                "operationId": "bcea938e87db24bf401f5d6fde521732",
+                "parameters": [
+                    {
+                        "name": "ticket_id",
+                        "in": "path",
+                        "description": "ID of the ticket",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "PDF file downloaded successfully"
+                    },
+                    "404": {
+                        "description": "Ticket not found"
                     }
                 }
             }

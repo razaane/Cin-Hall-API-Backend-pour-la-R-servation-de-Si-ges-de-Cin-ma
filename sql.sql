@@ -21,10 +21,9 @@ INSERT INTO seances (film_id, room_id, start_time, language, type, created_at, u
 (2, 2, '2026-03-21 20:00:00', 'EN', 'vip', NOW(), NOW());
 
 INSERT INTO reservations (user_id, seance_id, seat_number, status, created_at, updated_at) VALUES
-(2, 1, 45,'pending', NOW(), NOW()),
-(2, 2, 60,'paid', NOW(), NOW());
+(1, 1, 1,'pending', NOW(), NOW());
 
-=
+
 
 INSERT INTO tickets (reservation_id, user_id, qr_code, created_at, updated_at) VALUES
 (2, 2, 'QR123456789', NOW(), NOW());

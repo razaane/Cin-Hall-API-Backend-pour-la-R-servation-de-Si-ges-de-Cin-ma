@@ -64,10 +64,31 @@ class TicketController extends Controller
     }
 
 
-    // #[OA\Get(path: "/api/ticket/{ticket_id}/pdf",summary: "Generate and download ticket PDF",description: "Generate a PDF file for a ticket including QR code and reservation details",security: [["bearerAuth" => []]])]
-    // #[OA\Parameter(name: "ticket_id",in: "path",required: true,description: "ID of the ticket",schema: new OA\Schema(type: "integer"))]
-    // #[OA\Response(response: 200,description: "PDF file downloaded successfully")]
-    // #[OA\Response(response: 404,description: "Ticket not found")]
+#[OA\Get(
+    path: "/api/ticket/{ticket_id}/pdf",
+    summary: "Generate and download ticket PDF",
+    description: "Generate a PDF file for a ticket including QR code and reservation details",
+    tags: ["Tickets"],
+    parameters: [
+        new OA\Parameter(
+            name: "ticket_id",
+            in: "path",
+            required: true,
+            description: "ID of the ticket",
+            schema: new OA\Schema(type: "integer")
+        )
+    ],
+    responses: [
+        new OA\Response(
+            response: 200,
+            description: "PDF file downloaded successfully"
+        ),
+        new OA\Response(
+            response: 404,
+            description: "Ticket not found"
+        )
+    ]
+)]
 
 
     public function generationPdf($ticket_id){
