@@ -1,0 +1,1138 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "MyExp API",
+        "description": "API documentation for MyExp application",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/register": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Register a new user",
+                "operationId": "8a56853624e025573120a09a4c75d468",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "password",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "password_confirmation",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "User registered successfully"
+                    }
+                }
+            }
+        },
+        "/api/login": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "login a user",
+                "operationId": "a3b306d14572d1f4bd6c064b3233e7b8",
+                "parameters": [
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "password",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "User logged in successfully"
+                    }
+                }
+            }
+        },
+        "/api/logout": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Logout the authenticated user",
+                "operationId": "fe8f3429cd6979b3b4517e186505f9f9",
+                "responses": {
+                    "200": {
+                        "description": "User logged out successfully"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/refresh": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Refresh JWT token",
+                "operationId": "2c27d311a2876560fcb5a754b556cdc5",
+                "responses": {
+                    "200": {
+                        "description": "Token refreshed successfully"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/films": {
+            "get": {
+                "tags": [
+                    "Films"
+                ],
+                "summary": "Get all films with genre and seances",
+                "description": "Display a listing of the resource.",
+                "operationId": "271e474415d2f29bf3c163247c5f4639",
+                "responses": {
+                    "200": {
+                        "description": "List of films"
+                    }
+                }
+            }
+        },
+        "/api/admin/films": {
+            "post": {
+                "tags": [
+                    "Films"
+                ],
+                "summary": "Create a new film",
+                "description": "Store a newly created resource in storage.",
+                "operationId": "eac01818c2dbe40a6a95b0269b26324b",
+                "parameters": [
+                    {
+                        "name": "genre_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "title",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "description",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "duration",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "min_age",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Film created successfully"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/films/{id}": {
+            "get": {
+                "tags": [
+                    "Films"
+                ],
+                "summary": "Get a film by ID with genre and seances",
+                "description": "Display the specified resource.",
+                "operationId": "bb11826b5087b0708ec01458c9053803",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Film retrieved successfully"
+                    },
+                    "404": {
+                        "description": "Film not found"
+                    }
+                }
+            }
+        },
+        "/api/admin/films/{id}": {
+            "put": {
+                "tags": [
+                    "Films"
+                ],
+                "summary": "Update a film",
+                "description": "Update the specified resource in storage.",
+                "operationId": "95272670db71240d09dc179b22c6ffdd",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "genre_id",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "title",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "description",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "duration",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "min_age",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Film updated successfully"
+                    },
+                    "404": {
+                        "description": "Film not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Films"
+                ],
+                "summary": "Delete a film",
+                "description": "Remove the specified resource from storage.",
+                "operationId": "cdbe279be91934605786e7f5ecf1f7d2",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Film deleted successfully"
+                    },
+                    "404": {
+                        "description": "Film not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/genres": {
+            "get": {
+                "tags": [
+                    "Genres"
+                ],
+                "summary": "Get all genres with their films",
+                "description": "Display a listing of the resource.",
+                "operationId": "eb12635064fefadf7ff7e54900a73534",
+                "responses": {
+                    "200": {
+                        "description": "List of genres"
+                    }
+                }
+            }
+        },
+        "/api/admin/genres": {
+            "post": {
+                "tags": [
+                    "Genres"
+                ],
+                "summary": "Create a new genre",
+                "description": "Store a newly created resource in storage.",
+                "operationId": "a53e7d6642acce381b9ffba81b083fae",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Genre created successfully"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/genres/{id}": {
+            "get": {
+                "tags": [
+                    "Genres"
+                ],
+                "summary": "Get a single genre by ID with its films",
+                "description": "Display the specified resource.",
+                "operationId": "3e2ac2805d9f25d984bab075133bbb96",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Genre retrieved successfully"
+                    },
+                    "404": {
+                        "description": "Genre not found"
+                    }
+                }
+            }
+        },
+        "/api/admin/genres/{id}": {
+            "put": {
+                "tags": [
+                    "Genres"
+                ],
+                "summary": "Update a genre",
+                "description": "Update the specified resource in storage.",
+                "operationId": "6e7429cfff918761aee8033032bdbd63",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Genre updated successfully"
+                    },
+                    "404": {
+                        "description": "Genre not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Genres"
+                ],
+                "summary": "Delete a genre",
+                "description": "Remove the specified resource from storage.",
+                "operationId": "ac4cbabbd273fd174700826f72aec0bc",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Genre deleted successfully"
+                    },
+                    "404": {
+                        "description": "Genre not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/payments/stripe": {
+            "post": {
+                "tags": [
+                    "Payments"
+                ],
+                "summary": "Pay a reservation using Stripe",
+                "operationId": "d95e2910a8ee48d33fd5df314f132b8c",
+        "/api/reservations": {
+            "get": {
+                "tags": [
+                    "Reservations"
+                ],
+                "summary": "Lister les réservations de l’utilisateur connecté",
+                "description": "Liste toutes les réservations de l'utilisateur connecté",
+                "operationId": "fbc6050d9f7fdb07075d3aaeb157ffa9",
+                "responses": {
+                    "200": {
+                        "description": "Liste des réservations",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Reservation"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non authentifié"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Reservations"
+                ],
+                "summary": "Créer une réservation",
+                "description": "Crée une réservation",
+                "operationId": "01e3d21dc330a31de025203bc142ffa3",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "reservation_id",
+                                    "payment_method_id"
+                                ],
+                                "properties": {
+                                    "reservation_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "payment_method_id": {
+                                        "type": "string",
+                                        "example": "pm_card_visa"
+
+                                    "seance_id",
+                                    "number_of_seats"
+                                ],
+                                "properties": {
+                                    "seance_id": {
+                                        "type": "integer"
+                                    },
+                                    "number_of_seats": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Payment successful"
+                    },
+                    "400": {
+                        "description": "Invalid request or reservation issue"
+                    },
+                    "500": {
+                        "description": "Payment failed"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+                    "201": {
+                        "description": "Réservation créée",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Reservation"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Erreur de validation"
+                    },
+                    "404": {
+                        "description": "Séance introuvable"
+                    }
+                }
+            }
+        },
+        "/api/seances/{room_id}": {
+            "get": {
+                "tags": [
+                    "Seances"
+                ],
+                "summary": "Afficher les séances d’une salle",
+                "description": "Affiche toutes les séances pour une salle spécifique",
+                "operationId": "1f2ebdd05bfd9a3771b5ee17790f7f55",
+                "parameters": [
+                    {
+                        "name": "room_id",
+                        "in": "path",
+                        "description": "ID de la salle",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Liste des séances",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Seance"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Salle introuvable"
+                    }
+                }
+            }
+        },
+        "/api/reservations/{id}": {
+            "get": {
+                "tags": [
+                    "Reservations"
+                ],
+                "summary": "Afficher une réservation",
+                "description": "Affiche une réservation spécifique",
+                "operationId": "a226b43b2a6a846245e658d01bf00720",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Détails de la réservation"
+                    },
+                    "403": {
+                        "description": "Non autorisé"
+                    },
+                    "404": {
+                        "description": "Réservation introuvable"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Reservations"
+                ],
+                "summary": "Mettre à jour une réservation",
+                "description": "Met à jour une réservation",
+                "operationId": "02fa683a9f80a0563596fb06685bcbc7",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "number_of_seats"
+                                ],
+                                "properties": {
+                                    "number_of_seats": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Réservation mise à jour"
+                    },
+                    "400": {
+                        "description": "Erreur de mise à jour"
+                    },
+                    "403": {
+                        "description": "Non autorisé"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Reservations"
+                ],
+                "summary": "Annuler une réservation",
+                "description": "Annule une réservation",
+                "operationId": "9b6641e4ded1ff7adfce352d589b85e9",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Réservation annulée"
+                    },
+                    "403": {
+                        "description": "Non autorisé"
+                    }
+                }
+            }
+        },
+        "/api/reservations/{id}/expiration": {
+            "get": {
+                "tags": [
+                    "Reservations"
+                ],
+                "summary": "Vérifie si une réservation a expiré",
+                "description": "Vérifie si une réservation a expiré",
+                "operationId": "915bc1bcf70db8eb662707e53cf54829",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Statut d’expiration de la réservation"
+                    },
+                    "403": {
+                        "description": "Non autorisé"
+                    }
+                }
+            }
+        },
+        "/api/seances": {
+            "get": {
+                "tags": [
+                    "Seances"
+                ],
+                "summary": "Get all seances with their film",
+                "description": "Display a listing of the resource.",
+                "operationId": "eb8af953bc7b9646b2294583ed472f06",
+                "responses": {
+                    "200": {
+                        "description": "List of seances"
+                    }
+                }
+            }
+        },
+        "/api/admin/seances": {
+            "post": {
+                "tags": [
+                    "Seances"
+                ],
+                "summary": "Create a new seance",
+                "description": "Store a newly created resource in storage.",
+                "operationId": "62f13b67a60501e35f5af4fe9e53e59f",
+                "parameters": [
+                    {
+                        "name": "film_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "room_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "start_time",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "date-time"
+                        }
+                    },
+                    {
+                        "name": "type",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "normale",
+                                "vip"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Seance created successfully"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/seances/{id}": {
+            "get": {
+                "tags": [
+                    "Seances"
+                ],
+                "summary": "Get a seance by ID with its film",
+                "description": "Display the specified resource.",
+                "operationId": "a88625b9009c1ba7d2ce7ba63ec9d43f",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Seance retrieved successfully"
+                    },
+                    "404": {
+                        "description": "Seance not found"
+                    }
+                }
+            }
+        },
+        "/api/admin/seances/{id}": {
+            "put": {
+                "tags": [
+                    "Seances"
+                ],
+                "summary": "Update a seance",
+                "description": "Update the specified resource in storage.",
+                "operationId": "3d0c217e332a503d17ab8c3b79b9f5bc",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "film_id",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "room_id",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "start_time",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date-time"
+                        }
+                    },
+                    {
+                        "name": "type",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "normale",
+                                "vip"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Seance updated successfully"
+                    },
+                    "404": {
+                        "description": "Seance not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Seances"
+                ],
+                "summary": "Delete a seance",
+                "description": "Remove the specified resource from storage.",
+                "operationId": "1a2b1c9dc83b3b4cd7fbd97259d6494a",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Seance deleted successfully"
+                    },
+                    "404": {
+                        "description": "Seance not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/seances/filter": {
+            "get": {
+                "tags": [
+                    "Seances"
+                ],
+                "summary": "Filter seances by type, film_id or date",
+                "operationId": "d0389a201f69759fa0844e15ca657850",
+                "parameters": [
+                    {
+                        "name": "type",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "normale",
+                                "vip"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "film_id",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "date",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Filtered seances returned"
+                    }
+                }
+            }
+        },
+        "/api/tickets/generate/{reservation_id}": {
+            "post": {
+                "tags": [
+                    "Tickets"
+                ],
+                "summary": "Generate ticket",
+                "operationId": "805d5ef17bf9f2b2f1a7243fdd0a5666",
+                "parameters": [
+                    {
+                        "name": "reservation_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "404": {
+                        "description": "Reservation not found"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Reservation": {
+                "title": "Reservation",
+                "description": "Une réservation d’une séance",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "user_id": {
+                        "type": "integer",
+                        "example": 10
+                    },
+                    "seance_id": {
+                        "type": "integer",
+                        "example": 5
+                    },
+                    "number_of_seats": {
+                        "type": "integer",
+                        "example": 2
+                    },
+                    "status": {
+                        "type": "string",
+                        "example": "pending"
+                    },
+                    "expires_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2026-03-24T14:30:00Z"
+                    }
+                },
+                "type": "object"
+            },
+            "Seance": {
+                "title": "Seance",
+                "description": "Une séance d’une salle",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "room_id": {
+                        "type": "integer",
+                        "example": 2
+                    },
+                    "type": {
+                        "type": "string",
+                        "example": "VIP"
+                    },
+                    "start_time": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2026-03-25T10:00:00Z"
+                    },
+                    "end_time": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2026-03-25T12:00:00Z"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Auth",
+            "description": "Auth"
+        },
+        {
+            "name": "Films",
+            "description": "Films"
+        },
+        {
+            "name": "Genres",
+            "description": "Genres"
+        },
+        {
+            "name": "Payments",
+            "description": "Payments"
+            "name": "Reservations",
+            "description": "Reservations"
+        },
+        {
+            "name": "Seances",
+            "description": "Seances"
+        },
+        {
+            "name": "Tickets",
+            "description": "Tickets"
+        }
+    ]
+}

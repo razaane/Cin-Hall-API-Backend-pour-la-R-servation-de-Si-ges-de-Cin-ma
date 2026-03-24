@@ -4,9 +4,16 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use OpenApi\Attributes as OA;
 
 class AuthController extends Controller
 {
+    #[OA\Post(path: '/api/register', summary: 'Register a new user',tags: ["Auth"])] 
+    #[OA\Parameter(name: 'name', in: 'query', required: true, schema: new OA\Schema(type: 'string'))] 
+    #[OA\Parameter(name: 'email', in: 'query', required: true, schema: new OA\Schema(type: 'string'))] 
+    #[OA\Parameter(name: 'password', in: 'query', required: true, schema: new OA\Schema(type: 'string'))] 
+    #[OA\Parameter(name: 'password_confirmation', in: 'query', required: true, schema: new OA\Schema(type: 'string'))] 
+    #[OA\Response(response: 201, description: 'User registered successfully')]
     public function register(Request $request)
     {
         $data = $request->validate([
@@ -28,6 +35,10 @@ class AuthController extends Controller
         ], 201);
     }
 
+    #[OA\Post(path: '/api/login', summary: 'login a user',tags: ["Auth"])] 
+    #[OA\Parameter(name: 'email', in: 'query', required: true, schema: new OA\Schema(type: 'string'))] 
+    #[OA\Parameter(name: 'password', in: 'query', required: true, schema: new OA\Schema(type: 'string'))] 
+    #[OA\Response(response: 201, description: 'User logged in successfully')]
     public function login(Request $request)
     {
         $credentials = $request->validate([
@@ -48,6 +59,8 @@ class AuthController extends Controller
         ]);
     }
 
+    #[OA\Post(path: "/api/logout",summary: "Logout the authenticated user",tags: ["Auth"], security: [["bearerAuth" => []]])]
+    #[OA\Response(response: 200,description: "User logged out successfully")]
     public function logout()
     {
         auth('api')->logout();
@@ -57,6 +70,8 @@ class AuthController extends Controller
         ]);
     }
 
+    #[OA\Post(path: "/api/refresh",summary: "Refresh JWT token",tags: ["Auth"], security: [["bearerAuth" => []]])]
+    #[OA\Response(response: 200,description: "Token refreshed successfully")]
     public function refresh()
     {
         $token = auth('api')->refresh();
