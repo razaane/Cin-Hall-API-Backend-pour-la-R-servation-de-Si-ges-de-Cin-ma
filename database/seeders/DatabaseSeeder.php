@@ -15,7 +15,10 @@ class DatabaseSeeder extends Seeder
         $this->call([
             AdminSeeder::class,
             GenreSeeder::class,  
-            FilmSeeder::class
+            FilmSeeder::class,
+            RoomSeeder::class,  
+            SeanceSeeder::class,
+            ReservationSeeder::class
         ]);
     }
 }
