@@ -8,6 +8,7 @@ use App\Models\Ticket;
 use Illuminate\Http\Request;
 use Stripe\StripeClient;
 use Illuminate\Support\Str;
+use OpenApi\Attributes as OA;
 
 class PaymentController extends Controller
 {
@@ -15,51 +16,77 @@ class PaymentController extends Controller
 
     public function __construct()
     {
-        // Initialise Stripe avec la clé secrète
         $this->stripe = new StripeClient(env('STRIPE_SECRET'));
     }
 
+    #[OA\Post(
+        path: '/api/payments/stripe',
+        summary: 'Pay a reservation using Stripe',
+        tags: ['Payments'],
+        security: [['bearerAuth' => []]]
+    )]
+    #[OA\RequestBody(
+        required: true,
+        content: new OA\JsonContent(
+            required: ['reservation_id', 'payment_method_id'],
+            properties: [
+                new OA\Property(property: 'reservation_id', type: 'integer', example: 1),
+                new OA\Property(property: 'payment_method_id', type: 'string', example: 'pm_card_visa')
+            ]
+        )
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Payment successful'
+    )]
+    #[OA\Response(
+        response: 400,
+        description: 'Invalid request or reservation issue'
+    )]
+    #[OA\Response(
+        response: 500,
+        description: 'Payment failed'
+    )]
     public function payWithStripe(Request $request)
     {
-        // 1. Valider les données
+        // 1. Validation
         $request->validate([
             'reservation_id' => 'required|exists:reservations,id',
             'payment_method_id' => 'required|string'
         ]);
 
-        // 2. Récupérer la réservation
+        // 2. Récupération réservation
         $reservation = Reservation::with('seance', 'seats')
             ->where('id', $request->reservation_id)
             ->where('user_id', auth()->id())
             ->firstOrFail();
 
-        // 3. Vérifier si la réservation est expirée
+        // 3. Vérification statut
         if ($reservation->status === 'expired') {
             return response()->json([
                 'error' => 'Cette réservation a expiré. Veuillez recommencer.'
             ], 400);
         }
 
-        // 4. Vérifier si déjà payée
         if ($reservation->status === 'paid') {
             return response()->json([
                 'error' => 'Cette réservation est déjà payée'
             ], 400);
         }
 
-        // 5. Calculer le montant total
+        // 4. Calcul montant
         $amount = $reservation->seance->price * $reservation->seats->count();
 
         try {
-            // 6. Demander à Stripe de traiter le paiement
+            // 5. Paiement Stripe
             $paymentIntent = $this->stripe->paymentIntents->create([
-                'amount' => $amount * 100, // Stripe utilise les centimes
-                'currency' => 'mad',        // Dirham marocain
+                'amount' => $amount * 100,
+                'currency' => 'mad',
                 'payment_method' => $request->payment_method_id,
                 'confirm' => true
             ]);
 
-            // 7. Enregistrer le paiement dans notre base de données
+            // 6. Save payment
             $payment = Payment::create([
                 'reservation_id' => $reservation->id,
                 'amount' => $amount,
@@ -68,18 +95,18 @@ class PaymentController extends Controller
                 'status' => 'success'
             ]);
 
-            // 8. Mettre à jour le statut de la réservation
+            // 7. Update réservation
             $reservation->update(['status' => 'paid']);
 
-            // 9. Générer un ticket simple
+            // 8. Create ticket
             $ticket = Ticket::create([
                 'reservation_id' => $reservation->id,
                 'user_id' => auth()->id(),
-                'qr_code' => Str::random(32), // Code unique
+                'qr_code' => Str::random(32),
                 'pdf_path' => null
             ]);
 
-            // 10. Retourner la réponse
+            // 9. Response
             return response()->json([
                 'success' => true,
                 'message' => 'Paiement réussi !',
@@ -88,7 +115,8 @@ class PaymentController extends Controller
             ]);
 
         } catch (\Exception $e) {
-            // Si erreur, enregistrer l'échec
+
+            // Save failed payment
             Payment::create([
                 'reservation_id' => $reservation->id,
                 'amount' => $amount,
