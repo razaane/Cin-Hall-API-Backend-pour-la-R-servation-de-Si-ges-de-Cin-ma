@@ -14,7 +14,7 @@
         "laravel/tinker": "^2.10.1",
         "php-open-source-saver/jwt-auth": "^2.8",
         "simplesoftwareio/simple-qrcode": "^4.2",
-        "stripe/stripe-php": "^19.4"
+        "stripe/stripe-php": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

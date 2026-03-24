@@ -19,6 +19,18 @@ use App\Http\Controllers\SeanceController;
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
+// Films
+Route::get('/films', [FilmController::class, 'index']);
+Route::get('/films/{id}', [FilmController::class, 'show']);
+
+// Genres
+Route::get('/genres', [GenreController::class, 'index']);
+Route::get('/genres/{id}', [GenreController::class, 'show']);
+
+// Seances
+Route::get('/seances/filter', [SeanceController::class, 'filter']);
+Route::get('/seances', [SeanceController::class, 'index']);
+Route::get('/seances/{id}', [SeanceController::class, 'show']);
 
 Route::middleware('auth:api')->group(function () {
 
@@ -45,34 +57,6 @@ Route::apiResource('rooms', RoomController::class);
     //install pdf
     Route::get('/ticket/{ticket_id}/pdf', [TicketController::class, 'generationPdf']);
 
-    // Films
-    Route::get('/films', [FilmController::class, 'index']);
-    Route::get('/films/{id}', [FilmController::class, 'show']);
-
-    // Genres
-    Route::get('/genres', [GenreController::class, 'index']);
-    Route::get('/genres/{id}', [GenreController::class, 'show']);
-
-    // Seances
-    Route::get('/seances/filter', [SeanceController::class, 'filter']);
-    Route::get('/seances', [SeanceController::class, 'index']);
-    Route::get('/seances/{id}', [SeanceController::class, 'show']);
-
-    // Route pour créer une réservation (avec timer 15min)
-    Route::post('/reservations', [ReservationController::class, 'store']);
-    
-    // Route pour payer avec Stripe
-    Route::post('/payments/stripe', [PaymentController::class, 'payWithStripe']);
-
-    //
-    Route::get('rooms/{room}/seances', [ReservationController::class,'showSeances']);
-    Route::post('reservations', [ReservationController::class,'store']);
-    Route::get('reservations/{reservation}', [ReservationController::class,'show']);
-
-    Route::apiResource('rooms', RoomController::class);
-
-
-
     Route::middleware('isAdmin')->prefix('admin')->group(function () {
 
         Route::get('/users', [UserController::class, 'index']);
@@ -87,6 +71,7 @@ Route::apiResource('rooms', RoomController::class);
 
         //Genres
         Route::post('/genres', [GenreController::class, 'store']);
+        Route::put('/genres/{id}', [GenreController::class, 'update']);
         Route::delete('/genres/{id}', [GenreController::class, 'destroy']);
 
         //Seances
