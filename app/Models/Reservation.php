@@ -47,6 +47,10 @@ class Reservation extends Model
     {
         return $this->hasOne(Payment::class);
     }
+    public function room()
+{
+    return $this->belongsTo(Room::class);
+}
 
     /**
      * MÉTHODES
