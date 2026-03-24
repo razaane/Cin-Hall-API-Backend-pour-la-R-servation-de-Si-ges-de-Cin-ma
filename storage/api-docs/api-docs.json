@@ -485,6 +485,48 @@
                 ],
                 "summary": "Pay a reservation using Stripe",
                 "operationId": "d95e2910a8ee48d33fd5df314f132b8c",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "reservation_id",
+                                    "payment_method_id"
+                                ],
+                                "properties": {
+                                    "reservation_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "payment_method_id": {
+                                        "type": "string",
+                                        "example": "pm_card_visa"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Payment successful"
+                    },
+                    "400": {
+                        "description": "Invalid request or reservation issue"
+                    },
+                    "500": {
+                        "description": "Payment failed"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/reservations": {
             "get": {
                 "tags": [
@@ -525,18 +567,6 @@
                         "application/json": {
                             "schema": {
                                 "required": [
-                                    "reservation_id",
-                                    "payment_method_id"
-                                ],
-                                "properties": {
-                                    "reservation_id": {
-                                        "type": "integer",
-                                        "example": 1
-                                    },
-                                    "payment_method_id": {
-                                        "type": "string",
-                                        "example": "pm_card_visa"
-
                                     "seance_id",
                                     "number_of_seats"
                                 ],
@@ -554,21 +584,6 @@
                     }
                 },
                 "responses": {
-                    "200": {
-                        "description": "Payment successful"
-                    },
-                    "400": {
-                        "description": "Invalid request or reservation issue"
-                    },
-                    "500": {
-                        "description": "Payment failed"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
                     "201": {
                         "description": "Réservation créée",
                         "content": {
@@ -1123,6 +1138,8 @@
         {
             "name": "Payments",
             "description": "Payments"
+        },
+        {
             "name": "Reservations",
             "description": "Reservations"
         },
