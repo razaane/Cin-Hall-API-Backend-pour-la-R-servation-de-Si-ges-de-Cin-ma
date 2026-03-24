@@ -478,6 +478,315 @@
                 ]
             }
         },
+        "/api/payments/stripe": {
+            "post": {
+                "tags": [
+                    "Payments"
+                ],
+                "summary": "Pay a reservation using Stripe",
+                "operationId": "d95e2910a8ee48d33fd5df314f132b8c",
+        "/api/reservations": {
+            "get": {
+                "tags": [
+                    "Reservations"
+                ],
+                "summary": "Lister les réservations de l’utilisateur connecté",
+                "description": "Liste toutes les réservations de l'utilisateur connecté",
+                "operationId": "fbc6050d9f7fdb07075d3aaeb157ffa9",
+                "responses": {
+                    "200": {
+                        "description": "Liste des réservations",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Reservation"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non authentifié"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Reservations"
+                ],
+                "summary": "Créer une réservation",
+                "description": "Crée une réservation",
+                "operationId": "01e3d21dc330a31de025203bc142ffa3",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "reservation_id",
+                                    "payment_method_id"
+                                ],
+                                "properties": {
+                                    "reservation_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "payment_method_id": {
+                                        "type": "string",
+                                        "example": "pm_card_visa"
+
+                                    "seance_id",
+                                    "number_of_seats"
+                                ],
+                                "properties": {
+                                    "seance_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "number_of_seats": {
+                                        "type": "integer",
+                                        "example": 2
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Payment successful"
+                    },
+                    "400": {
+                        "description": "Invalid request or reservation issue"
+                    },
+                    "500": {
+                        "description": "Payment failed"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+                    "201": {
+                        "description": "Réservation créée"
+                    },
+                    "400": {
+                        "description": "Erreur de validation ou places insuffisantes"
+                    },
+                    "401": {
+                        "description": "Non authentifié"
+                    },
+                    "500": {
+                        "description": "Erreur serveur"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/rooms/{room}/seances": {
+            "get": {
+                "tags": [
+                    "Seances"
+                ],
+                "summary": "Afficher les séances d’une salle",
+                "description": "Affiche toutes les séances pour une salle spécifique",
+                "operationId": "607164a177d1de6d59da7f1ef2f0d0d1",
+                "parameters": [
+                    {
+                        "name": "room",
+                        "in": "path",
+                        "description": "ID de la salle",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Liste des séances"
+                    },
+                    "404": {
+                        "description": "Salle introuvable"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/reservations/{reservation}": {
+            "get": {
+                "tags": [
+                    "Reservations"
+                ],
+                "summary": "Afficher une réservation",
+                "description": "Affiche une réservation spécifique",
+                "operationId": "2aefc564f94e483fb93920c2935eeafe",
+                "parameters": [
+                    {
+                        "name": "reservation",
+                        "in": "path",
+                        "description": "ID de la réservation",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Succès"
+                    },
+                    "401": {
+                        "description": "Non authentifié"
+                    },
+                    "403": {
+                        "description": "Non autorisé"
+                    },
+                    "404": {
+                        "description": "Non trouvée"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Reservations"
+                ],
+                "summary": "Mettre à jour une réservation",
+                "description": "Met à jour une réservation",
+                "operationId": "459cb3958996a0266b294be06a643db0",
+                "parameters": [
+                    {
+                        "name": "reservation",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "number_of_seats"
+                                ],
+                                "properties": {
+                                    "number_of_seats": {
+                                        "type": "integer",
+                                        "example": 4
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Réservation mise à jour"
+                    },
+                    "400": {
+                        "description": "Erreur"
+                    },
+                    "401": {
+                        "description": "Non authentifié"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Reservations"
+                ],
+                "summary": "Annuler une réservation",
+                "description": "Annule une réservation",
+                "operationId": "9cb75e88bfb3a102881ea262dde33019",
+                "parameters": [
+                    {
+                        "name": "reservation",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Réservation annulée"
+                    },
+                    "401": {
+                        "description": "Non authentifié"
+                    },
+                    "403": {
+                        "description": "Non autorisé"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/reservations/{reservation}/expiration": {
+            "get": {
+                "tags": [
+                    "Reservations"
+                ],
+                "summary": "Vérifie si une réservation a expiré",
+                "description": "Vérifie l'expiration",
+                "operationId": "b41207596b98459aa4740fb356fd8b21",
+                "parameters": [
+                    {
+                        "name": "reservation",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Statut d’expiration"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/seances": {
             "get": {
                 "tags": [
@@ -725,9 +1034,99 @@
                     }
                 }
             }
+        },
+        "/api/tickets/generate/{reservation_id}": {
+            "post": {
+                "tags": [
+                    "Tickets"
+                ],
+                "summary": "Generate ticket",
+                "operationId": "805d5ef17bf9f2b2f1a7243fdd0a5666",
+                "parameters": [
+                    {
+                        "name": "reservation_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "404": {
+                        "description": "Reservation not found"
+                    }
+                }
+            }
         }
     },
     "components": {
+        "schemas": {
+            "Reservation": {
+                "title": "Reservation",
+                "description": "Une réservation d’une séance",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "user_id": {
+                        "type": "integer",
+                        "example": 10
+                    },
+                    "seance_id": {
+                        "type": "integer",
+                        "example": 5
+                    },
+                    "number_of_seats": {
+                        "type": "integer",
+                        "example": 2
+                    },
+                    "status": {
+                        "type": "string",
+                        "example": "pending"
+                    },
+                    "expires_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2026-03-24T14:30:00Z"
+                    }
+                },
+                "type": "object"
+            },
+            "Seance": {
+                "title": "Seance",
+                "description": "Une séance d’une salle",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "room_id": {
+                        "type": "integer",
+                        "example": 2
+                    },
+                    "type": {
+                        "type": "string",
+                        "example": "VIP"
+                    },
+                    "start_time": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2026-03-25T10:00:00Z"
+                    },
+                    "end_time": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2026-03-25T12:00:00Z"
+                    }
+                },
+                "type": "object"
+            }
+        },
         "securitySchemes": {
             "bearerAuth": {
                 "type": "http",
@@ -750,8 +1149,18 @@
             "description": "Genres"
         },
         {
+            "name": "Payments",
+            "description": "Payments"
+            "name": "Reservations",
+            "description": "Reservations"
+        },
+        {
             "name": "Seances",
             "description": "Seances"
+        },
+        {
+            "name": "Tickets",
+            "description": "Tickets"
         }
     ]
 }
