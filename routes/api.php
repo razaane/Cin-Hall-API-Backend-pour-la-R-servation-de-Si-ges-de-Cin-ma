@@ -86,5 +86,3 @@ Route::apiResource('rooms', RoomController::class);
 
 
 
-
-
