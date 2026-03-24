@@ -3,26 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\storeReservationRequest;
+use App\Http\Requests\UpdateReservationRequest;
 use App\Models\Reservation;
 use App\Models\Seance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Jobs\ExpireReservation;
-   use App\Http\Requests\UpdateReservationRequest;
 use OpenApi\Attributes as OA;
 
 class ReservationController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     */
-
-      /**
      * Liste toutes les réservations de l'utilisateur connecté
      */
     #[OA\Get(
         path: '/api/reservations',
         summary: 'Lister les réservations de l’utilisateur connecté',
+        security: [['bearerAuth' => []]],
         tags: ['Reservations'],
         responses: [
             new OA\Response(
@@ -33,32 +30,29 @@ class ReservationController extends Controller
                     items: new OA\Items(ref: '#/components/schemas/Reservation')
                 )
             ),
-            new OA\Response(
-                response: 401,
-                description: 'Non authentifié'
-            )
+            new OA\Response(response: 401, description: 'Non authentifié')
         ]
     )]
     public function index()
     {
         $reservations = Reservation::with('seance')
-        ->where('user_id', auth()->id())
-        ->get();
+            ->where('user_id', auth()->id())
+            ->get();
 
-    return response()->json($reservations);
+        return response()->json($reservations);
     }
-
 
     /**
      * Affiche toutes les séances pour une salle spécifique
      */
     #[OA\Get(
-        path: '/api/seances/{room_id}',
+        path: '/api/rooms/{room}/seances',
         summary: 'Afficher les séances d’une salle',
+        security: [['bearerAuth' => []]],
         tags: ['Seances'],
         parameters: [
             new OA\Parameter(
-                name: 'room_id',
+                name: 'room',
                 in: 'path',
                 required: true,
                 description: 'ID de la salle',
@@ -66,52 +60,39 @@ class ReservationController extends Controller
             )
         ],
         responses: [
-            new OA\Response(
-                response: 200,
-                description: 'Liste des séances',
-                content: new OA\JsonContent(
-                    type: 'array',
-                    items: new OA\Items(ref: '#/components/schemas/Seance')
-                )
-            ),
-            new OA\Response(
-                response: 404,
-                description: 'Salle introuvable'
-            )
+            new OA\Response(response: 200, description: 'Liste des séances'),
+            new OA\Response(response: 404, description: 'Salle introuvable')
         ]
     )]
     public function showSeances($room_id)
     {
-        $seances = Seance::where('room_id', $room_id)->get(); // ← CORRIGÉ
+        $seances = Seance::where('room_id', $room_id)->get();
         return response()->json($seances);
     }
 
-
-        /**
+    /**
      * Crée une réservation
      */
     #[OA\Post(
         path: '/api/reservations',
         summary: 'Créer une réservation',
+        security: [['bearerAuth' => []]],
         tags: ['Reservations'],
         requestBody: new OA\RequestBody(
             required: true,
             content: new OA\JsonContent(
-                required: ['seance_id','number_of_seats'],
+                required: ['seance_id', 'number_of_seats'],
                 properties: [
-                    new OA\Property(property: 'seance_id', type: 'integer'),
-                    new OA\Property(property: 'number_of_seats', type: 'integer')
+                    new OA\Property(property: 'seance_id', type: 'integer', example: 1),
+                    new OA\Property(property: 'number_of_seats', type: 'integer', example: 2)
                 ]
             )
         ),
         responses: [
-            new OA\Response(
-                response: 201,
-                description: 'Réservation créée',
-                content: new OA\JsonContent(ref: '#/components/schemas/Reservation')
-            ),
-            new OA\Response(response: 400, description: 'Erreur de validation'),
-            new OA\Response(response: 404, description: 'Séance introuvable')
+            new OA\Response(response: 201, description: 'Réservation créée'),
+            new OA\Response(response: 400, description: 'Erreur de validation ou places insuffisantes'),
+            new OA\Response(response: 401, description: 'Non authentifié'),
+            new OA\Response(response: 500, description: 'Erreur serveur')
         ]
     )]
     public function store(storeReservationRequest $request)
@@ -140,7 +121,7 @@ class ReservationController extends Controller
             'user_id' => auth()->id(),
             'status' => 'pending',
             'number_of_seats' => $numberOfSeats,
-            'expires_at' => now()->addMinutes(15) // ← AJOUTÉ
+            'expires_at' => now()->addMinutes(15)
         ]);
 
         ExpireReservation::dispatch($reservation->id);
@@ -150,25 +131,29 @@ class ReservationController extends Controller
             'reservation' => $reservation
         ], 201);
     }
-  /**
+
+    /**
      * Affiche une réservation spécifique
      */
     #[OA\Get(
-        path: '/api/reservations/{id}',
+        path: '/api/reservations/{reservation}',
         summary: 'Afficher une réservation',
+        security: [['bearerAuth' => []]],
         tags: ['Reservations'],
         parameters: [
             new OA\Parameter(
-                name: 'id',
+                name: 'reservation',
                 in: 'path',
                 required: true,
+                description: 'ID de la réservation',
                 schema: new OA\Schema(type: 'integer')
             )
         ],
         responses: [
-            new OA\Response(response: 200, description: 'Détails de la réservation'),
+            new OA\Response(response: 200, description: 'Succès'),
+            new OA\Response(response: 401, description: 'Non authentifié'),
             new OA\Response(response: 403, description: 'Non autorisé'),
-            new OA\Response(response: 404, description: 'Réservation introuvable')
+            new OA\Response(response: 404, description: 'Non trouvée')
         ]
     )]
     public function show(Reservation $reservation)
@@ -179,16 +164,18 @@ class ReservationController extends Controller
 
         return response()->json($reservation->load('seance'));
     }
-  /**
+
+    /**
      * Met à jour une réservation
      */
     #[OA\Put(
-        path: '/api/reservations/{id}',
+        path: '/api/reservations/{reservation}',
         summary: 'Mettre à jour une réservation',
+        security: [['bearerAuth' => []]],
         tags: ['Reservations'],
         parameters: [
             new OA\Parameter(
-                name: 'id',
+                name: 'reservation',
                 in: 'path',
                 required: true,
                 schema: new OA\Schema(type: 'integer')
@@ -199,14 +186,14 @@ class ReservationController extends Controller
             content: new OA\JsonContent(
                 required: ['number_of_seats'],
                 properties: [
-                    new OA\Property(property: 'number_of_seats', type: 'integer')
+                    new OA\Property(property: 'number_of_seats', type: 'integer', example: 4)
                 ]
             )
         ),
         responses: [
             new OA\Response(response: 200, description: 'Réservation mise à jour'),
-            new OA\Response(response: 400, description: 'Erreur de mise à jour'),
-            new OA\Response(response: 403, description: 'Non autorisé')
+            new OA\Response(response: 400, description: 'Erreur'),
+            new OA\Response(response: 401, description: 'Non authentifié')
         ]
     )]
     public function update(UpdateReservationRequest $request, Reservation $reservation)
@@ -215,32 +202,24 @@ class ReservationController extends Controller
             return response()->json(['error' => 'Non autorisé'], 403);
         }
 
-        if ($reservation->status === 'cancelled' || $reservation->status === 'expired') {
-            return response()->json([
-                'error' => 'Impossible de modifier cette réservation'
-            ], 400);
+        if (in_array($reservation->status, ['cancelled', 'expired'])) {
+            return response()->json(['error' => 'Impossible de modifier cette réservation'], 400);
         }
 
         $seance = $reservation->seance;
         $numberOfSeats = (int) $request->number_of_seats;
 
         if (strtolower($seance->type) === 'vip' && $numberOfSeats % 2 !== 0) {
-            return response()->json([
-                'error' => 'Pour VIP, nombre pair'
-            ], 400);
+            return response()->json(['error' => 'Pour VIP, le nombre de places doit être pair'], 400);
         }
 
         $availableSeats = Reservation::avlblSeats($seance->id) + $reservation->number_of_seats;
 
         if ($numberOfSeats > $availableSeats) {
-            return response()->json([
-                'error' => 'Pas assez de places'
-            ], 400);
+            return response()->json(['error' => 'Pas assez de places'], 400);
         }
 
-        $reservation->update([
-            'number_of_seats' => $numberOfSeats
-        ]);
+        $reservation->update(['number_of_seats' => $numberOfSeats]);
 
         return response()->json([
             'message' => 'Réservation mise à jour',
@@ -252,12 +231,13 @@ class ReservationController extends Controller
      * Annule une réservation
      */
     #[OA\Delete(
-        path: '/api/reservations/{id}',
+        path: '/api/reservations/{reservation}',
         summary: 'Annuler une réservation',
+        security: [['bearerAuth' => []]],
         tags: ['Reservations'],
         parameters: [
             new OA\Parameter(
-                name: 'id',
+                name: 'reservation',
                 in: 'path',
                 required: true,
                 schema: new OA\Schema(type: 'integer')
@@ -265,6 +245,7 @@ class ReservationController extends Controller
         ],
         responses: [
             new OA\Response(response: 200, description: 'Réservation annulée'),
+            new OA\Response(response: 401, description: 'Non authentifié'),
             new OA\Response(response: 403, description: 'Non autorisé')
         ]
     )]
@@ -274,7 +255,7 @@ class ReservationController extends Controller
             return response()->json(['error' => 'Non autorisé'], 403);
         }
 
-        $reservation->update(['status' => 'cancelled']); // ← CORRIGÉ
+        $reservation->update(['status' => 'cancelled']);
 
         return response()->json([
             'message' => 'Réservation annulée',
@@ -282,24 +263,24 @@ class ReservationController extends Controller
         ]);
     }
 
-      /**
-     * Vérifie si une réservation a expiré
+    /**
+     * Vérifie l'expiration
      */
     #[OA\Get(
-        path: '/api/reservations/{id}/expiration',
+        path: '/api/reservations/{reservation}/expiration',
         summary: 'Vérifie si une réservation a expiré',
+        security: [['bearerAuth' => []]],
         tags: ['Reservations'],
         parameters: [
             new OA\Parameter(
-                name: 'id',
+                name: 'reservation',
                 in: 'path',
                 required: true,
                 schema: new OA\Schema(type: 'integer')
             )
         ],
         responses: [
-            new OA\Response(response: 200, description: 'Statut d’expiration de la réservation'),
-            new OA\Response(response: 403, description: 'Non autorisé')
+            new OA\Response(response: 200, description: 'Statut d’expiration')
         ]
     )]
     public function checkExpiration($id)
