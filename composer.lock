@@ -4,7 +4,6 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-
     "content-hash": "8a88a5f70737b81cc0fb5355d2b3fb8a",
     "packages": [
         {
@@ -1471,6 +1470,20 @@
         },
         {
             "name": "laravel/framework",
+          
+          
+            "version": "v11.50.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel/framework.git",
+                "reference": "c761f591209b45f56c1317ecbff0b04c89cf7ba2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/c761f591209b45f56c1317ecbff0b04c89cf7ba2",
+                "reference": "c761f591209b45f56c1317ecbff0b04c89cf7ba2",
+      
+      
             "version": "v12.55.1",
             "source": {
                 "type": "git",
@@ -1481,6 +1494,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/laravel/framework/zipball/6d9185a248d101b07eecaf8fd60b18129545fd33",
                 "reference": "6d9185a248d101b07eecaf8fd60b18129545fd33",
+              
                 "shasum": ""
             },
             "require": {
@@ -1684,6 +1698,7 @@
             },
 
             "time": "2026-03-18T14:28:59+00:00"
+
         },
         {
             "name": "laravel/prompts",
@@ -3213,6 +3228,23 @@
         },
         {
             "name": "php-open-source-saver/jwt-auth",
+
+          
+          
+          
+            "version": "v2.8.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/PHP-Open-Source-Saver/jwt-auth.git",
+                "reference": "563f7dc025f48b9ecbacc271da509bbb4c6b3b23"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/PHP-Open-Source-Saver/jwt-auth/zipball/563f7dc025f48b9ecbacc271da509bbb4c6b3b23",
+                "reference": "563f7dc025f48b9ecbacc271da509bbb4c6b3b23",
+
+              
+              
             "version": "v2.9.0",
             "source": {
                 "type": "git",
@@ -3223,15 +3255,28 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/PHP-Open-Source-Saver/jwt-auth/zipball/648306caac5218e2daebfd2fac0130318ed4bdfa",
                 "reference": "648306caac5218e2daebfd2fac0130318ed4bdfa",
+
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
 
+              
+              
+                "illuminate/auth": "^10|^11|^12",
+                "illuminate/contracts": "^10|^11|^12",
+                "illuminate/http": "^10|^11|^12",
+                "illuminate/support": "^10|^11|^12",
+              
+              
+
                 "illuminate/auth": "^12|^13",
                 "illuminate/contracts": "^12|^13",
                 "illuminate/http": "^12|^13",
                 "illuminate/support": "^12|^13",
+
+              
+              
                 "lcobucci/jwt": "^5.4",
                 "namshi/jose": "^7.0",
                 "nesbot/carbon": "^2.0|^3.0",
@@ -3303,8 +3348,8 @@
                 "issues": "https://github.com/PHP-Open-Source-Saver/jwt-auth/issues",
                 "source": "https://github.com/PHP-Open-Source-Saver/jwt-auth"
             },
+            "time": "2025-10-15T12:02:51+00:00"
 
-            "time": "2026-03-06T00:13:17+00:00"
         },
         {
             "name": "phpoption/phpoption",

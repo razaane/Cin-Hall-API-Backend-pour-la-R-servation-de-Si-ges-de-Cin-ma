@@ -1006,6 +1006,33 @@
                     }
                 }
             }
+        },
+        "/api/tickets/generate/{reservation_id}": {
+            "post": {
+                "tags": [
+                    "Tickets"
+                ],
+                "summary": "Generate ticket",
+                "operationId": "805d5ef17bf9f2b2f1a7243fdd0a5666",
+                "parameters": [
+                    {
+                        "name": "reservation_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "404": {
+                        "description": "Reservation not found"
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -1102,6 +1129,10 @@
         {
             "name": "Seances",
             "description": "Seances"
+        },
+        {
+            "name": "Tickets",
+            "description": "Tickets"
         }
     ]
 }

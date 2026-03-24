@@ -25,6 +25,24 @@ class TicketController extends Controller
     // )]
     // #[OA\Response(response: 404,description: "Reservation not found")]
 
+    #[OA\Post(
+        path: "/api/tickets/generate/{reservation_id}",
+        summary: "Generate ticket",
+        tags: ["Tickets"],
+        parameters: [
+            new OA\Parameter(
+                name: "reservation_id",
+                in: "path",
+                required: true,
+                schema: new OA\Schema(type: "integer")
+            )
+        ],
+        responses: [
+            new OA\Response(response: 200, description: "Success"),
+            new OA\Response(response: 404, description: "Reservation not found")
+        ]
+    )]
+
 
     public function generateTicket($reservation_id){
         //recuperer la reservation 
