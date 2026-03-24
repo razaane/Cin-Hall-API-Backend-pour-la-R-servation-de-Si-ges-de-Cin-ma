@@ -24,15 +24,25 @@ Route::middleware('auth:api')->group(function () {
 
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/refresh', [AuthController::class, 'refresh']);
+    // Route pour créer une réservation
+
+    Route::post('/reservations', [ReservationController::class, 'store']);
+    Route::get('rooms/{room}/seances', [ReservationController::class,'showSeances']);
+    Route::post('reservations', [ReservationController::class,'store']);
+    Route::get('reservations/{reservation}', [ReservationController::class,'show']);
+
+Route::apiResource('rooms', RoomController::class);
+    // Route pour payer avec Stripe
+    Route::post('/payments/stripe', [PaymentController::class, 'payWithStripe']);
 
 
     Route::get('/profile', [UserController::class, 'show']);
     Route::put('/profile', [UserController::class, 'update']);
     Route::delete('/profile', [UserController::class, 'destroy']);
 
-    //generate ticket 
-    Route::get('/generate-ticket/{reservation_id}', [TicketController::class, 'generateTicket']); 
-    //install pdf   
+    //generate ticket
+    Route::get('/generate-ticket/{reservation_id}', [TicketController::class, 'generateTicket']);
+    //install pdf
     Route::get('/ticket/{ticket_id}/pdf', [TicketController::class, 'generationPdf']);
 
     // Films
