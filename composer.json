@@ -12,9 +12,10 @@
         "laravel/framework": "^11.0",
         "laravel/sanctum": "^4.3",
         "laravel/tinker": "^2.10.1",
-        "php-open-source-saver/jwt-auth": "^2.8",
+
+        "php-open-source-saver/jwt-auth": "^2.9",
         "simplesoftwareio/simple-qrcode": "^4.2",
-"stripe/stripe-php": "^19.4"
+        "stripe/stripe-php": "^19.4"
 
     },
     "require-dev": {
