@@ -48,6 +48,21 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/seances', [SeanceController::class, 'index']);
     Route::get('/seances/{id}', [SeanceController::class, 'show']);
 
+    // Route pour créer une réservation (avec timer 15min)
+    Route::post('/reservations', [ReservationController::class, 'store']);
+    
+    // Route pour payer avec Stripe
+    Route::post('/payments/stripe', [PaymentController::class, 'payWithStripe']);
+
+    //
+    Route::get('rooms/{room}/seances', [ReservationController::class,'showSeances']);
+    Route::post('reservations', [ReservationController::class,'store']);
+    Route::get('reservations/{reservation}', [ReservationController::class,'show']);
+
+    Route::apiResource('rooms', RoomController::class);
+
+
+
     Route::middleware('isAdmin')->prefix('admin')->group(function () {
 
         Route::get('/users', [UserController::class, 'index']);
@@ -73,24 +88,6 @@ Route::middleware('auth:api')->group(function () {
 
 
 });
-// Routes qui nécessitent d'être connecté
-Route::middleware('auth:sanctum')->group(function () {
-    
-    // Route pour créer une réservation (avec timer 15min)
-    Route::post('/reservations', [ReservationController::class, 'store']);
-    
-    // Route pour payer avec Stripe
-    Route::post('/payments/stripe', [PaymentController::class, 'payWithStripe']);
-    
-});
 
-    Route::middleware('auth:api')->group(function() {
-    Route::get('rooms/{room}/seances', [ReservationController::class,'showSeances']);
-    Route::post('reservations', [ReservationController::class,'store']);
-    Route::get('reservations/{reservation}', [ReservationController::class,'show']);
-
-Route::apiResource('rooms', RoomController::class);
-
-});
 
 
